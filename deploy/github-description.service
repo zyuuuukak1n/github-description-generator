@@ -1,0 +1,37 @@
+# ==============================================================================
+# systemd Service Unit: GitHub Description Generator
+# Deployment target: /etc/systemd/system/github-description.service
+# ==============================================================================
+
+[Unit]
+Description=GitHub Description Generator FastAPI Web Application
+After=network.target
+
+[Service]
+Type=simple
+# 実行ユーザーとグループ (環境に合わせて変更可能: ubuntu / www-data 等)
+User=ubuntu
+Group=ubuntu
+
+# 作業ディレクトリとPython仮想環境パス
+WorkingDirectory=/var/www/github-description
+EnvironmentFile=/var/www/github-description/.env
+ExecStart=/var/www/github-description/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8085 --workers 2
+
+# 自動再起動 & クラッシュリカバリ設計
+Restart=always
+RestartSec=5s
+
+# セキュリティサンドボックス制限
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+
+# ログ出力先 (journald / syslog連携)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=github-description
+
+[Install]
+WantedBy=multi-user.target
