@@ -14,9 +14,13 @@ class Settings(BaseSettings):
     APP_ENV: str = Field(default="production", description="Environment: development | production")
     DEBUG: bool = False
 
-    # Server Binding
+    # Server Binding & Subpath
     HOST: str = "127.0.0.1"
     PORT: int = 8085
+    ROOT_PATH: str = Field(
+        default="",
+        description="ASGI root_path for subpath proxy (e.g. /tool/github-description)",
+    )
 
     # Security & CORS
     CORS_ORIGINS: Union[str, List[str]] = "*"

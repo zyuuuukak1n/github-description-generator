@@ -40,12 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentTone = 'concise';
   let activeTopics = new Set();
 
+  // Helper to resolve API paths whether hosted at root '/' or under a subpath like '/tool/github-description/'
+  function getApiUrl(endpoint) {
+    const path = window.location.pathname;
+    const basePath = path.endsWith('/') ? path : path + '/';
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+    return `${basePath}${cleanEndpoint}`;
+  }
+
   // 1. Initial Health Check
   checkHealth();
 
   async function checkHealth() {
     try {
-      const res = await fetch('/health');
+      const res = await fetch(getApiUrl('health'));
       if (res.ok) {
         const data = await res.json();
         const engineLabel = {
@@ -81,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         target_char_limit: parseInt(charLimit.value, 10) || 350
       };
 
-      const res = await fetch('/api/analyze', {
+      const res = await fetch(getApiUrl('api/analyze'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -258,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         github_token: token
       };
 
-      const res = await fetch('/api/update', {
+      const res = await fetch(getApiUrl('api/update'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

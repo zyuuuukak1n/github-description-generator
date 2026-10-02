@@ -38,6 +38,7 @@ limiter = Limiter(
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
+    root_path=settings.ROOT_PATH,
     docs_url="/api/docs" if settings.APP_ENV != "production" else None,
     redoc_url=None,
     openapi_url="/api/openapi.json" if settings.APP_ENV != "production" else None,

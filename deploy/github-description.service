@@ -14,9 +14,9 @@ User=ubuntu
 Group=ubuntu
 
 # 作業ディレクトリとPython仮想環境パス
-WorkingDirectory=/var/www/github-description
-EnvironmentFile=/var/www/github-description/.env
-ExecStart=/var/www/github-description/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8085 --workers 2
+WorkingDirectory=/var/www/tool/github-description
+EnvironmentFile=/var/www/tool/github-description/.env
+ExecStart=/var/www/tool/github-description/venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8085 --workers 2
 
 # 自動再起動 & クラッシュリカバリ設計
 Restart=always

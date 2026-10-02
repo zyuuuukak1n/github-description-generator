@@ -6,7 +6,13 @@
   <title>GitHub Description Generator - AIリポジトリ説明文自動生成＆直接設定ツール</title>
   <meta name="description" content="GitHubパブリックリポジトリの内容・README・技術スタックを自動解析し、最適な説明文（Description：350文字以内）とトピックタグを生成。ワンクリックでリポジトリに直接設定できる開発者向けツール。">
   <meta name="keywords" content="GitHub, Description, README, AI, 生成AI, リポジトリ説明文, 開発者ツール">
-  <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    // Ensure trailing slash on directories for robust relative asset resolution under subpaths
+    if (!window.location.pathname.endsWith('/') && !window.location.pathname.includes('.')) {
+      window.location.replace(window.location.pathname + '/' + window.location.search);
+    }
+  </script>
+  <link rel="stylesheet" href="static/css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
 </head>
 <body>
@@ -214,6 +220,6 @@
     </footer>
   </div>
 
-  <script src="/static/js/app.js"></script>
+  <script src="static/js/app.js"></script>
 </body>
 </html>
