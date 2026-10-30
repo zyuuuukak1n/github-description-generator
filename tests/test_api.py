@@ -193,3 +193,30 @@ class TestUnhandledExceptionMasking:
         assert "内部で予期せぬエラーが発生しました" in data["error"]
         assert "error_id" in data
         assert data["error_id"]  # UUID exists for operational tracking
+
+
+class TestStaticFilesAndReverseProxyServing:
+    """Ensure static assets and index HTML serve correctly under root and subpaths."""
+
+    def test_static_css_and_js_served_at_root(self):
+        resp_css = client.get("/static/css/style.css")
+        assert resp_css.status_code == 200
+        assert "text/css" in resp_css.headers.get("content-type", "")
+
+        resp_js = client.get("/static/js/app.js")
+        assert resp_js.status_code == 200
+        assert "javascript" in resp_js.headers.get("content-type", "")
+
+    def test_static_served_under_defensive_subpaths(self):
+        resp_sub_css = client.get("/tools/github-description/static/css/style.css")
+        assert resp_sub_css.status_code == 200
+        assert "text/css" in resp_sub_css.headers.get("content-type", "")
+
+    def test_index_html_served_at_all_canonical_paths(self):
+        paths = ["/", "/tools/github-description", "/tools/github-description/"]
+        for p in paths:
+            resp = client.get(p)
+            assert resp.status_code == 200
+            assert "text/html" in resp.headers.get("content-type", "")
+            assert "GitHub Description Generator" in resp.text
+

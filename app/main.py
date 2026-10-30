@@ -38,7 +38,7 @@ limiter = Limiter(
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    root_path=settings.ROOT_PATH,
+    root_path="",
     docs_url="/api/docs" if settings.APP_ENV != "production" else None,
     redoc_url=None,
     openapi_url="/api/openapi.json" if settings.APP_ENV != "production" else None,
@@ -272,9 +272,26 @@ async def update_repository_description(
 # Static Files & SPA Frontend Serving
 # ------------------------------------------------------------------------------
 if STATIC_DIR.exists():
-    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+    static_app = StaticFiles(directory=str(STATIC_DIR))
+
+    # 1. Standard static mount (when reverse proxy strips subpath to /static)
+    app.mount("/static", static_app, name="static")
+
+    # 2. Defensive static mounts for subpaths (/tools/github-description and /tool/...)
+    subpath_prefixes = ["/tools/github-description", "/tool/github-description"]
+    if settings.ROOT_PATH and settings.ROOT_PATH.strip("/"):
+        clean_prefix = f"/{settings.ROOT_PATH.strip('/')}"
+        if clean_prefix not in subpath_prefixes:
+            subpath_prefixes.append(clean_prefix)
+
+    for prefix in subpath_prefixes:
+        app.mount(f"{prefix}/static", static_app, name=f"static_{prefix.replace('/', '_')}")
 
     @app.api_route("/", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.api_route("/tools/github-description", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.api_route("/tools/github-description/", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.api_route("/tool/github-description", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.api_route("/tool/github-description/", methods=["GET", "HEAD"], include_in_schema=False)
     async def serve_index():
         index_file = STATIC_DIR / "index.html"
         if index_file.exists():
