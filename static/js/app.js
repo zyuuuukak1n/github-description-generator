@@ -1,6 +1,6 @@
 /**
  * GitHub Description Generator - Client-side Interactive Application Logic
- * Copyright (c) 2026 慧すたん
+ * Copyright (c) 2026 じゅーかきん
  */
 
 document.addEventListener('DOMContentLoaded', () => {

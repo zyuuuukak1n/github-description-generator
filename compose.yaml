@@ -1,0 +1,28 @@
+# ==============================================================================
+# Docker Compose: GitHub Description Generator
+# Specification: Compose Spec (compose.yaml)
+# Security: 127.0.0.1 Loopback binding, restart resilience, log rotation
+# Deployment Path: /home/zyuuuukak1n/docker/apps/github-description/compose.yaml
+# ==============================================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: github-description
+    restart: unless-stopped
+    ports:
+      # ホスト側のループバックアドレス (127.0.0.1) にのみバインドし、外部直接アクセスを遮断
+      - "127.0.0.1:8085:8085"
+    env_file:
+      - .env
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8085
+      - ROOT_PATH=/tools/github-description
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

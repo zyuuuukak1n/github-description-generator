@@ -1,0 +1,39 @@
+# Git & Version Control
+.git/
+.github/
+
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.token
+
+# Python cache & tests
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.ruff_cache/
+tests/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Operations & Documentation (exclude from image)
+DEPLOYMENT_GUIDE_LOCAL.md
+SESSION_HISTORY.md
+*.log
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
